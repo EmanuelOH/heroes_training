@@ -52,9 +52,6 @@ public class UserEntity implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<StudentEntity> student;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<TeacherEntity> teacher;
-
     @Column(nullable = false)
     private Boolean enabled;
 

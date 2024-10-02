@@ -48,7 +48,7 @@ public class Mission {
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
-    private TeacherEntity teacher;
+    private UserEntity teacher;
 
     @ManyToMany
     @JoinTable(
