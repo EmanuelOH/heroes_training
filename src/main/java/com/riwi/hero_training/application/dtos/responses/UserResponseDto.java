@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class UserResponseDto {
     private Long id;
-    private String name;
+    private String username;
     private String email;
     private String role;
 }

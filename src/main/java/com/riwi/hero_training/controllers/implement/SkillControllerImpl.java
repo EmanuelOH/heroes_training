@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,14 +27,14 @@ public class SkillControllerImpl implements ISkillController {
     private final ISkillService skillService;
 
 
-    @SecurityRequirement(name = "bearerAuth") // Requiere autenticación Bearer
-    @PostMapping // Ruta para crear una nueva habilidad
+    //  @SecurityRequirement(name = "bearerAuth") // Requiere autenticación Bearer
+    @PostMapping("/create") // Ruta para crear una nueva habilidad
     @Operation(
             summary = "Create a new skill.",
             description = "Provides the skill data to create a new skill."
     )
     @Override
-    public ResponseEntity<Skill> create(SkillRequestDto request) {
+    public ResponseEntity<Skill> create(@Validated @RequestBody SkillRequestDto request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.skillService.create(request));
     }
 
@@ -44,13 +45,13 @@ public class SkillControllerImpl implements ISkillController {
             description = "Deletes a skill with the specified ID."
     )
     @Override
-    public ResponseEntity<Void> delete(Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         this.skillService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping
+    @GetMapping("/readAll")
     @Operation(
             summary = "Get all skills.",
             description = "Returns a list of all skills."
@@ -78,7 +79,8 @@ public class SkillControllerImpl implements ISkillController {
             description = "Updates an existing skill with the specified ID."
     )
     @Override
-    public ResponseEntity<Skill> update(SkillRequestDto request, Long id) {
+    public ResponseEntity<Skill> update(@Validated @RequestBody SkillRequestDto request,
+                                        @PathVariable Long id) {
         return ResponseEntity.ok(this.skillService.update(request,id));
     }
 }

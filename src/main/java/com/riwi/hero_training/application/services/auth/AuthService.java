@@ -48,7 +48,7 @@ public class AuthService implements IAuthService {
                 .message(user.getRole() + "Succesfull authentication") // Mensajito
                 .token(this.jwtUtil.generateToken(user))// Genera el token
                 .id(user.getId())
-                .name(user.getUsername())
+                .username(user.getUsername())
                 .email(user.getEmail())
                 .role(user.getRole().name())
                 .build();

@@ -35,7 +35,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public AuthUserResponseDto register(UserRequestDto request, Roles role) {
         //Verifica si el usuario existe
-        UserEntity userDB = userRepository.findByUsernameOrEmail(request.getName(), request.getEmail());
+        UserEntity userDB = userRepository.findByUsernameOrEmail(request.getUsername(), request.getEmail());
 
         //Verifica si el usuario ya existe
         if(userDB != null){
@@ -46,7 +46,7 @@ public class UserServiceImpl implements IUserService {
 
         //Crea un nueco usuario
         UserEntity user = UserEntity.builder()
-                .username(request.getName())
+                .username(request.getUsername())
                 .email(request.getEmail())
                 .password(this.passwordEncoder.encode(request.getPassword()))
                 .role(role)
@@ -64,7 +64,7 @@ public class UserServiceImpl implements IUserService {
                 .message(user.getRole() + " successfully authenticated")
                 .token(this.jwtUtil.generateToken(user))
                 .id(user.getId())
-                .name(user.getUsername())
+                .username(user.getUsername())
                 .email(user.getEmail())
                 .role(user.getRole().name())
                 .build();
@@ -109,7 +109,7 @@ public class UserServiceImpl implements IUserService {
         }
         UserEntity userEntity = optionalUser.get();
 
-        userEntity.setUsername(userRequestDto.getName());
+        userEntity.setUsername(userRequestDto.getUsername());
         userEntity.setEmail(userEntity.getEmail());
 
         return userRepository.save(userEntity);

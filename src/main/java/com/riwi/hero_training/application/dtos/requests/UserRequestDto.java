@@ -12,7 +12,7 @@ import lombok.*;
 @Builder
 public class UserRequestDto {
     @NotBlank(message = "Name cannot be blank")
-    private String name;
+    private String username;
 
     @NotBlank(message = "Email cannot be blank")
     @Email(message = "Email should be valid")

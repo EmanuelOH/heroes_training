@@ -10,5 +10,5 @@ import lombok.*;
 @Builder
 public class SkillRequestDto {
     @NotBlank(message = "Skill name cannot be blank")
-    private String name;
+    private String skill;
 }

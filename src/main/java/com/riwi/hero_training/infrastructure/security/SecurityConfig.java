@@ -27,15 +27,21 @@ public class SecurityConfig {
     private final String [] PUBLIC_ENDPOINT = {
             "/auth/login",
             "/users/register/student",
-            "/skills",
-            "/users/readAll",
             "/swagger-ui/**",
-            "/v3/api-docs/**"
+            "/v3/api-docs/**",
+            "/skills/create"
     };
 
     //Rutas privadas
     private final String [] ADMIN_ENDPOINT = {
-            "users/register/teacher"
+            "/users/**",
+            "/users/register/admin",
+            "/users/register/teacher",
+            "/missions/**"
+    };
+
+    private final String [] TEACHER_ENDPOINT = {
+            "/missions/**"
     };
 
     //Configuracion del SecurityFilterChain
@@ -49,7 +55,8 @@ public class SecurityConfig {
                     porque las solicitudes no dependen de la sesión almacenada en el navegador.
                 */
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(ADMIN_ENDPOINT).hasAuthority(Roles.ADMIN.name()) //Requiere autoridad de admin para ADMIN_ENDPOINT
+                        .requestMatchers(ADMIN_ENDPOINT).hasAuthority(Roles.ADMIN.name()) // Requiere autoridad de admin para ADMIN_ENDPOINT
+                        .requestMatchers(TEACHER_ENDPOINT).hasAuthority(Roles.TEACHER.name()) // Requiere autoridad de teacher para TEACHER_ENDPOINT
                         .requestMatchers(PUBLIC_ENDPOINT).permitAll() // Permite acceso a PUBLIC_ENDPOINT sin authentificacion
                         .anyRequest().authenticated() //Requiere autenticacion para cualquier otra solicitud
                 )

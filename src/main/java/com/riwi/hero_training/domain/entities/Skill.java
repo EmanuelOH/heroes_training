@@ -19,16 +19,21 @@ public class Skill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 20, nullable = false)
+    @Column(nullable = false)
     private String skill;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private LocalDateTime created_at;
 
     @UpdateTimestamp
     private LocalDateTime updated_at;
 
-    @ManyToMany(mappedBy = "skills")
-    private Set<StudentEntity> student;
+    @ManyToMany
+    @JoinTable(
+            name = "skills_students",
+            joinColumns = @JoinColumn(name = "skill_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private Set<UserEntity> student;
 }

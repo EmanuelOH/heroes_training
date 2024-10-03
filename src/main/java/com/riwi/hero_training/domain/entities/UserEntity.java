@@ -42,13 +42,11 @@ public class UserEntity implements UserDetails {
     private Roles role;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime created_at;
 
     @UpdateTimestamp
     private LocalDateTime updated_at;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<StudentEntity> student;
 
     @Column(nullable = false)
     private Boolean enabled;

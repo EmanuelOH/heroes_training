@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class MissionControllerImpl implements IMissionController {
             description = "Provides the mission data to create a new mission."
     )
     @Override
-    public ResponseEntity<Mission> create(MissionRequestDto requestDto) {
+    public ResponseEntity<Mission> create(@Validated @RequestBody MissionRequestDto requestDto) {
         Mission createdMission = missionService.create(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdMission);
     }
@@ -45,7 +46,7 @@ public class MissionControllerImpl implements IMissionController {
             description = "Deletes a mission with the specified ID."
     )
     @Override
-    public ResponseEntity<Void> delete(Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         missionService.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -66,7 +67,7 @@ public class MissionControllerImpl implements IMissionController {
             description = "Returns a mission with the specified ID."
     )
     @Override
-    public ResponseEntity<MissionResponseDto> readById(Long id) {
+    public ResponseEntity<MissionResponseDto> readById(@PathVariable Long id) {
         return ResponseEntity.ok(this.missionService.readById(id));
     }
 
@@ -77,7 +78,8 @@ public class MissionControllerImpl implements IMissionController {
             description = "Updates an existing mission with the specified ID."
     )
     @Override
-    public ResponseEntity<Mission> update(MissionRequestDto requestDto, Long id) {
+    public ResponseEntity<Mission> update(@Validated @RequestBody MissionRequestDto requestDto,
+                                          @PathVariable Long id) {
         return ResponseEntity.ok(this.missionService.evaluateMission(requestDto, id));
     }
 }

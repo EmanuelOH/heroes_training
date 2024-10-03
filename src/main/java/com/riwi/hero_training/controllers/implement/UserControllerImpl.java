@@ -28,7 +28,7 @@ public class UserControllerImpl implements IUserController {
     @Autowired
     private final IUserService userService;
 
-    //@SecurityRequirement(name = "bearerAuth") // Requiere una autentificacion JWT
+    @SecurityRequirement(name = "bearerAuth") // Requiere una autentificacion JWT
     @PostMapping("register/admin")
     @Operation(
             summary = "Create an admin", //Describcion breve de la operacion que se hara
@@ -46,7 +46,7 @@ public class UserControllerImpl implements IUserController {
             description = "Provides the user data to create a teacher and the token to validate the permissions."
     )
     @Override
-    public ResponseEntity<AuthUserResponseDto> registerTeacher(UserRequestDto requestDto) {
+    public ResponseEntity<AuthUserResponseDto> registerTeacher(@Validated @RequestBody UserRequestDto requestDto) {
         return ResponseEntity.ok(this.userService.register(requestDto, Roles.TEACHER));
     }
 
@@ -56,7 +56,7 @@ public class UserControllerImpl implements IUserController {
             description = "Provides the user data to create a student."
     )
     @Override
-    public ResponseEntity<AuthUserResponseDto> registerStudent(UserRequestDto requestDto) {
+    public ResponseEntity<AuthUserResponseDto> registerStudent(@Validated @RequestBody UserRequestDto requestDto) {
         return ResponseEntity.ok(this.userService.register(requestDto, Roles.STUDENT));
     }
 
@@ -92,7 +92,7 @@ public class UserControllerImpl implements IUserController {
             description = "Retrieve a user's details by their ID, with proper authentication."
     )
     @Override
-    public ResponseEntity<UserResponseDto> readById(Long id) {
+    public ResponseEntity<UserResponseDto> readById(@PathVariable Long id) {
         return ResponseEntity.ok(this.userService.readById(id));
     }
 
@@ -103,7 +103,8 @@ public class UserControllerImpl implements IUserController {
             description = "Update a user's details by their ID, requiring authentication."
     )
     @Override
-    public ResponseEntity<UserEntity> update(UserRequestDto requestDto, Long id) {
+    public ResponseEntity<UserEntity> update(@Validated @PathVariable UserRequestDto requestDto,
+                                             @PathVariable Long id) {
         return ResponseEntity.ok(this.userService.update(requestDto, id));
     }
 }
