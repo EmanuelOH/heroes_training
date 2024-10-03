@@ -14,5 +14,6 @@ public class MissionResponseDto {
     private String title;
     private String description;
     private String difficulty;
+    private Long evaluate;
     private Set<Long> requiredSkillIds;
 }

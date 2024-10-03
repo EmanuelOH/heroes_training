@@ -11,4 +11,6 @@ public interface IMissionService extends
         ReadAllService<MissionResponseDto>,
         ReadByIdService<MissionResponseDto, Long>,
         DeleteService<Long> {
+
+    public Mission evaluateMission(MissionRequestDto request, Long id);
 }

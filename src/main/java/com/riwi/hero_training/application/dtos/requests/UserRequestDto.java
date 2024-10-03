@@ -2,6 +2,7 @@ package com.riwi.hero_training.application.dtos.requests;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
@@ -17,9 +18,7 @@ public class UserRequestDto {
     @Email(message = "Email should be valid")
     private String email;
 
+    @Size(min = 6, max = 20)
     @NotBlank(message = "Password cannot be blank")
     private String password;
-
-    @NotBlank(message = "Role cannot be blank")
-    private String role;
 }

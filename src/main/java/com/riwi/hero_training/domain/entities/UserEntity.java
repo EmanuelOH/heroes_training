@@ -28,14 +28,13 @@ public class UserEntity implements UserDetails {
     private Long id;
 
     @Column(length = 50, nullable = false)
-    private String name;
+    private String username;
 
     @Email
     @Column(length = 100, nullable = false)
     private String email;
 
-    @Size(min = 6, max = 20)
-    @Column(length = 20, nullable = false)
+    @Column(length = 100, nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -43,7 +42,6 @@ public class UserEntity implements UserDetails {
     private Roles role;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
 
     @UpdateTimestamp
@@ -62,7 +60,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return username;
     }
 
     @Override

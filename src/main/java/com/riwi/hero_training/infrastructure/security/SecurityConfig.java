@@ -26,15 +26,16 @@ public class SecurityConfig {
     //Rutas publicas
     private final String [] PUBLIC_ENDPOINT = {
             "/auth/login",
-            "/user/register",
+            "/users/register/student",
+            "/skills",
+            "/users/readAll",
             "/swagger-ui/**",
             "/v3/api-docs/**"
     };
 
     //Rutas privadas
     private final String [] ADMIN_ENDPOINT = {
-            "/user/admin/register",
-            "/users"
+            "users/register/teacher"
     };
 
     //Configuracion del SecurityFilterChain

@@ -35,7 +35,7 @@ public class JwtUtil {
                         "id", user.getId(),  // ID del usuario
                         "role", user.getRole()  // Rol del usuario
                 ))
-                .setSubject(user.getName())  // Establece el sujeto (nombre de usuario) del token.
+                .setSubject(user.getUsername())  // Establece el sujeto (nombre de usuario) del token.
                 .setIssuedAt(new Date(System.currentTimeMillis()))  // Fecha de creación del token.
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))  // Fecha de expiración del token.
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)  // Firma el token usando la clave secreta y el algoritmo HS256.

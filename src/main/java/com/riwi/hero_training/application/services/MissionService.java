@@ -8,6 +8,7 @@ import com.riwi.hero_training.domain.enums.Difficulty;
 import com.riwi.hero_training.domain.ports.service.interfaces.IMissionService;
 import com.riwi.hero_training.infrastructure.persistence.MissionRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +21,9 @@ public class MissionService implements IMissionService {
     @Autowired
     private MissionRepository missionRepository;
 
-    @Autowired
-    private MissionMapper missionMapper;
-
-
     @Override
     public Mission create(MissionRequestDto request) {
-        Mission mission = missionMapper.toEntity(request);
+        Mission mission = MissionMapper.INSTANCE.toEntity(request);
         return missionRepository.save(mission);
     }
 
@@ -48,7 +45,7 @@ public class MissionService implements IMissionService {
         List<Mission> missions = missionRepository.findAll();
 
         return missions.stream()
-                .map(missionMapper::toResponseDto)
+                .map(MissionMapper.INSTANCE::toResponseDto)
                 .collect(Collectors.toList());
     }
 
@@ -56,7 +53,7 @@ public class MissionService implements IMissionService {
     public MissionResponseDto readById(Long id) {
         Mission mission = missionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Mission not found with id: " + id));
-        return missionMapper.toResponseDto(mission);
+        return MissionMapper.INSTANCE.toResponseDto(mission);
     }
 
     @Override
@@ -65,5 +62,17 @@ public class MissionService implements IMissionService {
             throw new EntityNotFoundException("Mission not found with id: " + id);
         }
         missionRepository.deleteById(id);
+    }
+
+    @Override
+    public Mission evaluateMission(MissionRequestDto request, Long id) {
+        Optional<Mission> existingMission = missionRepository.findById(id);
+
+        if (existingMission.isPresent()) {
+            Mission mission = existingMission.get();
+            mission.setEvaluate(request.getEvaluate());
+            return missionRepository.save(mission);
+        }
+        throw new EntityNotFoundException("Mission not found with id: " + id);
     }
 }

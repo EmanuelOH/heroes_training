@@ -27,9 +27,6 @@ public class UserServiceImpl implements IUserService {
     public final UserRepository userRepository;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -45,9 +42,11 @@ public class UserServiceImpl implements IUserService {
             throw new InvalidCredentialException("Username register"); //Exception si el usuario ya existe
         }
 
+        System.out.println("Paso");
+
         //Crea un nueco usuario
         UserEntity user = UserEntity.builder()
-                .name(request.getName())
+                .username(request.getName())
                 .email(request.getEmail())
                 .password(this.passwordEncoder.encode(request.getPassword()))
                 .role(role)
@@ -58,18 +57,22 @@ public class UserServiceImpl implements IUserService {
         //Guarda el usuario creado en la base de datos
         user = this.userRepository.save(user);
 
+        System.out.println("Paso y guardo");
+
         //Genera la respuesta de registro e el token JWT
         return AuthUserResponseDto.builder()
-                .message(user.getRole() + "successfully authenticated")
+                .message(user.getRole() + " successfully authenticated")
                 .token(this.jwtUtil.generateToken(user))
                 .id(user.getId())
-                .name(user.getName())
+                .name(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole().name())
                 .build();
     }
 
     @Override
     public UserEntity create(UserRequestDto userRequestDto) {
-        UserEntity userEntity = userMapper.toEntity(userRequestDto);
+        UserEntity userEntity = UserMapper.INSTANCE.toEntity(userRequestDto);
         return userRepository.save(userEntity);
     }
 
@@ -87,7 +90,7 @@ public class UserServiceImpl implements IUserService {
         List<UserEntity> listUser = userRepository.findAll();
 
         return listUser.stream()
-                .map(userMapper::toResponseDto)
+                .map(UserMapper.INSTANCE::toResponseDto)
                 .collect(Collectors.toList());
     }
 
@@ -95,7 +98,7 @@ public class UserServiceImpl implements IUserService {
     public UserResponseDto readById(Long id) {
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        return userMapper.toResponseDto(user);
+        return UserMapper.INSTANCE.toResponseDto(user);
     }
 
     @Override
@@ -106,7 +109,7 @@ public class UserServiceImpl implements IUserService {
         }
         UserEntity userEntity = optionalUser.get();
 
-        userEntity.setName(userRequestDto.getName());
+        userEntity.setUsername(userRequestDto.getName());
         userEntity.setEmail(userEntity.getEmail());
 
         return userRepository.save(userEntity);

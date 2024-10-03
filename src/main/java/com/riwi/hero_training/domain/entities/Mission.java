@@ -39,6 +39,9 @@ public class Mission {
     @CreatedBy
     private Long created_by;
 
+    @Column
+    private Long evaluate;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;

@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 public interface MissionMapper {
     MissionMapper INSTANCE = Mappers.getMapper(MissionMapper.class);
 
-    public Mission toEntity(MissionRequestDto requestDto);
+    Mission toEntity(MissionRequestDto requestDto);
 
-    public MissionResponseDto toResponseDto(Mission mission);
+    MissionResponseDto toResponseDto(Mission mission);
 }

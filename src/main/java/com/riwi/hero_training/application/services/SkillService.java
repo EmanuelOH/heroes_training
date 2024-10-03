@@ -19,12 +19,9 @@ public class SkillService implements ISkillService {
     @Autowired
     private SkillRepository skillRepository;
 
-    @Autowired
-    private SkillMapper skillMapper;
-
     @Override
     public Skill create(SkillRequestDto request) {
-        Skill skill = skillMapper.toEntity(request);
+        Skill skill = SkillMapper.INSTANCE.toEntity(request);
         return skillRepository.save(skill);
     }
 
@@ -44,7 +41,7 @@ public class SkillService implements ISkillService {
         List<Skill> skills = skillRepository.findAll();
 
         return skills.stream()
-                .map(skillMapper::toResponseDto)
+                .map(SkillMapper.INSTANCE::toResponseDto)
                 .collect(Collectors.toList());
     }
 
@@ -52,7 +49,7 @@ public class SkillService implements ISkillService {
     public SkillResponseDto readById(Long id) {
         Skill skill = skillRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Skill not found with id: " + id));
-        return skillMapper.toResponseDto(skill);
+        return SkillMapper.INSTANCE.toResponseDto(skill);
     }
 
     @Override

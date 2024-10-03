@@ -20,5 +20,7 @@ public class MissionRequestDto {
     @NotBlank(message = "Difficulty cannot be blank")
     private String difficulty;
 
+    private Long evaluate;
+
     private Set<Long> skillIds;
 }

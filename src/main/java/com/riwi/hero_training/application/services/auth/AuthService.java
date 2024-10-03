@@ -33,7 +33,7 @@ public class AuthService implements IAuthService {
     @Override
     public AuthUserResponseDto login(AuthUserRequestDto request) {
         // Cargar el usuario a partir del identificador (nombre de usuario o correo)
-        UserEntity user = (UserEntity) userDetailsService.loadUserByUsername(request.getEmail());
+        UserEntity user = (UserEntity) userDetailsService.loadUserByUsername(request.getIdentifier());
 
         //Verifica si las contraseña coinciden
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
@@ -41,12 +41,16 @@ public class AuthService implements IAuthService {
         }
 
         //Realiza la autentificacion
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getIdentifier(), request.getPassword()));
 
         //Genera la respuesta de autentificacion del token JWT
         return AuthUserResponseDto.builder()
                 .message(user.getRole() + "Succesfull authentication") // Mensajito
-                .token(this.jwtUtil.generateToken(user)) // Genera el token
+                .token(this.jwtUtil.generateToken(user))// Genera el token
+                .id(user.getId())
+                .name(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole().name())
                 .build();
     }
 }
